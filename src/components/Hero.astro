@@ -19,8 +19,6 @@ import CtaGroup from './CtaGroup.astro';
         <em>с&nbsp;причинами, а&nbsp;не&nbsp;с&nbsp;проявлением.</em>
       </p>
 
-      <p class="method">Клиентцентрированный подход и&nbsp;когнитивно-поведенческие практики</p>
-
       <div class="ctas">
         <CtaGroup label="Написать в Telegram" variant="primary" />
         <a class="btn btn-ghost" href="#services">Стоимость и&nbsp;форматы</a>
@@ -38,7 +36,7 @@ import CtaGroup from './CtaGroup.astro';
           src={heroImg}
           alt="Мария Микова, психолог, Барнаул"
           widths={[520, 780, 1000]}
-          sizes="(max-width: 1024px) 520px, 440px"
+          sizes="(max-width: 600px) 360px, (max-width: 1024px) 520px, 440px"
           format="webp"
           quality={88}
           loading="eager"
@@ -207,6 +205,11 @@ import CtaGroup from './CtaGroup.astro';
   @media (max-width: 600px) {
     .frame {
       max-width: 360px;
+    }
+  }
+  @media (max-width: 480px) {
+    .ctas > .btn-ghost {
+      display: none;
     }
   }
 </style>
