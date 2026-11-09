@@ -1,0 +1,99 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { diplomaCaptions } from '../data/master';
+
+const imgs = import.meta.glob<{ default: ImageMetadata }>('/src/assets/diplomas/*.jpg', { eager: true });
+const docs = Object.entries(imgs)
+  .sort(([a], [b]) => {
+    const ai = parseInt(a.match(/d-(\d+)/)?.[1] || '0', 10);
+    const bi = parseInt(b.match(/d-(\d+)/)?.[1] || '0', 10);
+    return ai - bi;
+  })
+  .map(([, mod], i) => ({ img: mod.default, caption: diplomaCaptions[i] || 'Документ об образовании' }));
+---
+
+<section id="education" class="edu">
+  <div class="wrap">
+    <header class="section-head" data-reveal>
+      <span class="section-eyebrow">Образование</span>
+      <h2>Дипломы и&nbsp;удостоверения.</h2>
+      <p>
+        Высшее профессиональное образование: специалитет, магистратура,
+        аспирантура. Плюс программы повышения квалификации, в&nbsp;том числе
+        по&nbsp;методам когнитивно-поведенческой терапии.
+      </p>
+    </header>
+
+    <div class="docs">
+      {docs.map((d, i) => (
+        <a
+          class="doc"
+          href={d.img.src}
+          target="_blank"
+          rel="noopener"
+          data-reveal
+          data-reveal-delay={Math.min(i * 70, 350)}
+        >
+          <Image
+            src={d.img}
+            alt={d.caption}
+            widths={[360, 600]}
+            sizes="(max-width: 600px) 90vw, 300px"
+            format="webp"
+            quality={80}
+            loading="lazy"
+          />
+          <span class="cap" set:html={d.caption} />
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .edu {
+    background: var(--bg);
+  }
+  .docs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+  }
+  .doc {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-decoration: none;
+    color: inherit;
+  }
+  .doc :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: #fff;
+    display: block;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .doc:hover :global(img) {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 32px -20px rgba(31, 25, 21, 0.25);
+  }
+  .cap {
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: var(--ink-muted);
+  }
+  @media (max-width: 1024px) {
+    .docs {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (max-width: 700px) {
+    .docs {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>
